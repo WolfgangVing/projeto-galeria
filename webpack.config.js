@@ -9,16 +9,14 @@ module.exports = {
     mode: modoDev ? 'development' : 'production',
     entry: './src/index.js',
     devServer: {
-        contentBase: './build',
+        static: './build',
         port: 9000,
     },
     optimization: {
         minimize: true,
         minimizer: [
             new TerserPlugin({
-                cache: true,
                 parallel: true,
-                sourceMap: true
             }),
             new CssMinimizerPlugin()
         ]
@@ -29,10 +27,18 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({ filename: 'estilo.css' }),
-        new CopyPlugin([
-            { context: 'src/', from: '**/*.html' },
-            { context: 'src/', from: 'imgs/**/*' }
-        ])
+        new CopyPlugin({
+            patterns: [
+                { 
+                    context: 'src/', 
+                    from: '**/*.html' 
+                },
+                { 
+                    context: 'src/', 
+                    from: 'imgs/**/*' 
+                }
+            ]
+        })
     ],
     module: {
         rules: [{
